@@ -1,123 +1,198 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atalhos Pessoais</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #fff;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            color: #fff;
-        }
-        header {
-            background: linear-gradient(45deg, #FF5733, #FFC300);
-            padding: 20px;
-            font-size: 2em;
-        }
-        .menu {
-            background-color: #333;
-            padding: 15px;
-            margin: 20px 0;
-        }
-        .menu a {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            margin: 10px;
-            border-radius: 5px;
-            background-color: #555;
-            transition: background-color 0.3s;
-        }
-        .menu a:hover {
-            background-color: #777;
-        }
-        .message {
-            background-color: #222;
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-        .footer {
-            background-color: #222;
-            color: #bbb;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JP – Atalhos</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #fdfdfd;
+        color: #333;
+    }
+
+    /* saudação */
+    header {
+        padding: 40px 20px;
+        text-align: center;
+        font-size: 2.2rem;
+        font-weight: 600;
+        background: linear-gradient(
+            to bottom,
+            rgba(255,150,170,0.6),
+            rgba(255,180,190,0.3),
+            transparent
+        );
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(6px);
+        z-index: 10;
+        transition: opacity 0.4s ease;
+    }
+
+    /* quando rolar, saudação some */
+    body.scrolled header {
+        opacity: 0.35;
+    }
+
+    /* container dos tópicos */
+    .list {
+        width: 90%;
+        max-width: 500px;
+        margin: 30px auto;
+    }
+
+    .item {
+        background: rgba(255, 240, 240, 0.7);
+        padding: 18px 20px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.2rem;
+        transition: background 0.3s;
+    }
+
+    .item:hover {
+        background: rgba(255, 225, 225, 0.9);
+    }
+
+    /* seta */
+    .arrow {
+        font-size: 1.3rem;
+        transition: transform 0.35s ease;
+    }
+
+    /* área que expande */
+    .content {
+        max-height: 0;
+        overflow: hidden;
+        background: rgba(255, 240, 245, 0.8);
+        margin-top: -8px;
+        border-radius: 0 0 12px 12px;
+        padding: 0 20px;
+        transition: max-height 0.45s ease;
+    }
+
+    .content p {
+        margin-top: 20px;
+        font-size: 1rem;
+        color: #444;
+    }
+
+    /* botão acessar */
+    .open-btn {
+        display: inline-block;
+        margin: 15px 0 25px;
+        padding: 12px 22px;
+        background: #ffb3c6;
+        color: #fff;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .open-btn:hover {
+        background: #ff99b3;
+        transform: scale(1.03);
+    }
+
+    /* seta virada pra cima */
+    .item.active .arrow {
+        transform: rotate(90deg);
+    }
+
+</style>
 </head>
 <body>
 
-<header>
-    <div id="greeting"></div>
-    <div class="menu">
-        <a href="#" onclick="showMessage('instagram')">Instagram</a>
-        <a href="#" onclick="showMessage('tiktok')">TikTok</a>
-        <a href="#" onclick="showMessage('youtube')">YouTube</a>
-        <a href="#" onclick="showMessage('chatgpt')">ChatGPT</a>
-        <a href="#" onclick="showMessage('gmail')">Gmail</a>
+<header id="greeting"></header>
+
+<div class="list">
+
+    <div class="item" onclick="toggle(0)">
+        TikTok <span class="arrow">ᐅ</span>
     </div>
-</header>
+    <div class="content">
+        <p>Assistir um tiktokzinho né JP? Para relaxar um pouquinho..</p>
+        <a class="open-btn" href="https://www.tiktok.com" target="_blank">Acessar TikTok</a>
+    </div>
 
-<div id="message" class="message"></div>
+    <div class="item" onclick="toggle(1)">
+        Instagram <span class="arrow">ᐅ</span>
+    </div>
+    <div class="content">
+        <p>Eai JP, alguém mandou mensagem?.. Ou vai só ver o feed mesmo?..</p>
+        <a class="open-btn" href="https://www.instagram.com" target="_blank">Acessar Instagram</a>
+    </div>
 
-<div class="footer">
-    <p>Site pessoal de JP</p>
+    <div class="item" onclick="toggle(2)">
+        YouTube <span class="arrow">ᐅ</span>
+    </div>
+    <div class="content">
+        <p>Assistir um videozinho né naqueles pique.. Ou só vai de shorts mesmo? haha</p>
+        <a class="open-btn" href="https://www.youtube.com" target="_blank">Acessar YouTube</a>
+    </div>
+
+    <div class="item" onclick="toggle(3)">
+        ChatGPT <span class="arrow">ᐅ</span>
+    </div>
+    <div class="content">
+        <p>Chatzinho é daora mermão, vai tratar de algum assunto sério? Ou só algo que tu não conseguiu resolver ainda? Kkkkk</p>
+        <a class="open-btn" href="https://chat.openai.com" target="_blank">Acessar ChatGPT</a>
+    </div>
+
+    <div class="item" onclick="toggle(4)">
+        Gmail <span class="arrow">ᐅ</span>
+    </div>
+    <div class="content">
+        <p>O que foi dessa vez? Código? Vai responder e-mail?..</p>
+        <a class="open-btn" href="https://mail.google.com" target="_blank">Acessar Gmail</a>
+    </div>
+
 </div>
 
 <script>
-    // Saudação dependendo do horário
-    const greetingElement = document.getElementById('greeting');
-    const hours = new Date().getHours();
-    if (hours < 12) {
-        greetingElement.innerHTML = 'Bom dia, JP!';
-    } else if (hours < 18) {
-        greetingElement.innerHTML = 'Boa tarde, JP!';
-    } else {
-        greetingElement.innerHTML = 'Boa noite, JP!';
-    }
+    // saudação
+    const h = new Date().getHours();
+    const g = document.getElementById("greeting");
+    g.innerHTML =
+        h < 12 ? "Bom dia, JP!" :
+        h < 18 ? "Boa tarde, JP!" :
+                 "Boa noite, JP!";
 
-    // Função para mostrar mensagens personalizadas
-    function showMessage(site) {
-        let message = '';
-        let link = '';
+    // sumir saudação ao rolar
+    window.onscroll = () => {
+        if (window.scrollY > 10) document.body.classList.add("scrolled");
+        else document.body.classList.remove("scrolled");
+    };
 
-        switch(site) {
-            case 'instagram':
-                message = 'Eai JP, alguém mandou mensagem?.. Ou vai só ver o feed mesmo?..';
-                link = 'https://www.instagram.com';
-                break;
-            case 'tiktok':
-                message = 'Assistir um tiktokzinho né JP? Para relaxar um pouquinho..';
-                link = 'https://www.tiktok.com';
-                break;
-            case 'youtube':
-                message = 'Assistir um videozinho né naqueles pique.. Ou só vai de shorts mesmo? haha';
-                link = 'https://www.youtube.com';
-                break;
-            case 'chatgpt':
-                message = 'Chatzinho é daora mermão, vai tratar de algum assunto sério? Ou só algo que tu não conseguiu resolver ainda? Kkkkk';
-                link = 'https://chat.openai.com';
-                break;
-            case 'gmail':
-                message = 'O\'que foi dessa vez? Código? Vai responder e-mail?..';
-                link = 'https://mail.google.com';
-                break;
-            default:
-                message = 'Clique em um atalho para ver a mensagem!';
-                link = '#';
+    // animação expandir tópicos
+    function toggle(i) {
+        const items = document.querySelectorAll(".item");
+        const contents = document.querySelectorAll(".content");
+
+        const item = items[i];
+        const content = contents[i];
+
+        const isOpen = item.classList.contains("active");
+
+        // fecha todos antes de abrir outro
+        items.forEach((el, x) => {
+            el.classList.remove("active");
+            contents[x].style.maxHeight = "0px";
+        });
+
+        // se estava fechado → abre
+        if (!isOpen) {
+            item.classList.add("active");
+            content.style.maxHeight = content.scrollHeight + "px";
         }
-
-        document.getElementById('message').innerHTML = `
-            <p>${message}</p>
-            <a href="${link}" target="_blank" style="color: #FFD700; text-decoration: none; font-size: 1.2em;">Ir para o site</a>
-        `;
     }
 </script>
 
