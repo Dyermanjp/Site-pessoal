@@ -82,7 +82,7 @@
   #preCard{
     background: rgba(255,255,255,0.95);
     padding:28px; border-radius:16px; text-align:center;
-    max-width:420px; width:90%;
+    max-width:420px; width:90%; position:relative;
   }
   #preCard p{ margin:0 0 14px; color: #222; line-height:1.45; }
   #enterBtn{
@@ -93,6 +93,16 @@
     border:none;
     background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
     color:white; cursor:pointer;
+  }
+
+  /* theme toggle on overlay (small) */
+  #preThemeBtn{
+    position:absolute;
+    right:12px;
+    top:12px;
+    width:44px; height:44px; border-radius:10px;
+    border:none; display:inline-grid; place-items:center; cursor:pointer;
+    background:var(--card-bg);
   }
 
   /* Easter eggs button (fixed) */
@@ -178,8 +188,14 @@
 <!-- PRE-OVERLAY / AVISO -->
 <div id="preOverlay">
   <div id="preCard" role="dialog" aria-modal="true">
+    <!-- theme toggle added to overlay (works) -->
+    <button id="preThemeBtn" aria-label="Alternar tema (overlay)">
+      <svg id="preSun" viewBox="0 0 24 24" width="20" height="20" style="position:absolute;"><circle cx="12" cy="12" r="3.5" fill="currentColor"/></svg>
+      <svg id="preMoon" viewBox="0 0 24 24" width="20" height="20" style="position:absolute;opacity:0;transform:scale(.75) rotate(-18deg);"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z" fill="currentColor"/></svg>
+    </button>
+
     <p style="font-size:1.05rem;"><strong>Aviso!</strong><br><br>
-    O modo claro do site é <strong>BEEEEEM</strong> claro mesmo. Na direita superior você tem a opção de deixar no modo escuro antes de entrar.</p>
+    O modo claro do site é <strong>um pouco</strong> claro mesmo. Na direita superior você tem a opção de deixar no modo escuro antes de entrar.</p>
     <button id="enterBtn">entrar no site</button>
   </div>
 </div>
@@ -187,7 +203,7 @@
 <header id="header">
   <div id="greeting">Bom dia, JP!</div>
 
-  <!-- theme toggle button sun / moon -->
+  <!-- theme toggle button sun / moon (main header) -->
   <button class="theme-btn" id="themeToggle" aria-label="Alternar tema">
     <span style="position:relative; width:34px; height:34px;">
       <!-- sun -->
@@ -215,16 +231,16 @@
   <div id="eggCard" role="dialog" aria-modal="true">
     <div id="eggClose" aria-label="Fechar">✕</div>
     <h3>Pistas dos Easter Eggs</h3>
-    <p><strong>#EE2</strong> — Toca duas vezes na saudação.</p>
-    <p><strong>#EE3</strong> — Digita rapidamente as letras <code>j</code> depois <code>p</code>.</p>
-    <p><strong>#EE6</strong> — Mantém o mouse sobre um botão “Acessar” por 3s.</p>
-    <p><strong>#EE7</strong> — Clica e segura onde tem \"Sobre o site\" por ~1s.</p>
-    <p><strong>#EE8</strong> — Clica 3x rápido no topo (header).</p>
+    <p><strong>E1</strong> — Dê um duplo clique na saudação (onde está "Bom dia/Boa tarde/...").</p>
+    <p><strong>E2</strong> — Digite rapidamente as letras <code>j</code> depois <code>p</code>.</p>
+    <p><strong>E3</strong> — Mantenha o mouse sobre um botão “Acessar” por 3s.</p>
+    <p><strong>E4</strong> — Clique e segure onde tem "Sobre o site" por ~1s.</p>
+    <p><strong>E5</strong> — Clique 3 vezes no topo do site (em cima do bom dia/tarde/noite).</p>
   </div>
 </div>
 
 <!-- toast -->
-<div id="eggToast" class="egg-toast">Você achou um easter egg ✨</div>
+<div id="eggToast" class="egg-toast"></div>
 
 <main class="main" id="mainContent" aria-hidden="true">
   <section class="list" id="list">
@@ -325,11 +341,62 @@
 </main>
 
 <script>
-/* ------------------ Pre-overlay (entrar) ------------------ */
+/* ------------------ Helpers & DOM refs ------------------ */
 const preOverlay = document.getElementById('preOverlay');
+const preCard = document.getElementById('preCard');
 const enterBtn = document.getElementById('enterBtn');
 const mainContent = document.getElementById('mainContent');
+const gEl = document.getElementById('greeting');
+const header = document.getElementById('header');
+const themeBtn = document.getElementById('themeToggle');
+const sun = document.getElementById('sun');
+const moon = document.getElementById('moon');
 
+/* overlay theme btn refs */
+const preThemeBtn = document.getElementById('preThemeBtn');
+const preSun = document.getElementById('preSun');
+const preMoon = document.getElementById('preMoon');
+
+const eggBtn = document.getElementById('eggBtn');
+const eggPanel = document.getElementById('eggPanel');
+const eggClose = document.getElementById('eggClose');
+const eggToast = document.getElementById('eggToast');
+
+/* ------------------ Theme logic (shared) ------------------ */
+function setDark(val){
+  if(val){
+    document.body.classList.add('dark');
+    sun.style.opacity = '0';
+    moon.style.opacity = '1';
+    moon.style.transform = 'scale(1) rotate(0deg)';
+    // overlay icons
+    if(preSun && preMoon){ preSun.style.opacity = '0'; preMoon.style.opacity = '1'; preMoon.style.transform = 'scale(1) rotate(0deg)'; }
+  } else {
+    document.body.classList.remove('dark');
+    sun.style.opacity = '1';
+    moon.style.opacity = '0';
+    moon.style.transform = 'scale(.75) rotate(-18deg)';
+    if(preSun && preMoon){ preSun.style.opacity = '1'; preMoon.style.opacity = '0'; preMoon.style.transform = 'scale(.75) rotate(-18deg)'; }
+  }
+}
+const saved = localStorage.getItem('jp_dark') === '1';
+setDark(saved);
+
+/* toggle both header button and overlay button */
+function toggleTheme(){
+  const isDark = !document.body.classList.contains('dark');
+  setDark(isDark);
+  localStorage.setItem('jp_dark', isDark ? '1' : '0');
+  // small animation on main button
+  themeBtn.animate([{transform:'scale(1)'},{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:220});
+}
+
+/* main header theme toggle */
+themeBtn.addEventListener('click', toggleTheme);
+/* overlay theme toggle */
+if(preThemeBtn) preThemeBtn.addEventListener('click', toggleTheme);
+
+/* ------------------ Pre-overlay (entrar) ------------------ */
 enterBtn.addEventListener('click', () => {
   // anima saída
   preOverlay.style.transition = 'opacity .35s ease, transform .35s ease';
@@ -343,7 +410,6 @@ enterBtn.addEventListener('click', () => {
 });
 
 /* ------------------ Saudação dinâmica ------------------ */
-const gEl = document.getElementById('greeting');
 function atualizarSaudacao(){
   const h = new Date().getHours();
   gEl.textContent = h < 12 ? "Bom dia, JP!" : h < 18 ? "Boa tarde, JP!" : "Boa noite, JP!";
@@ -351,7 +417,6 @@ function atualizarSaudacao(){
 atualizarSaudacao();
 
 /* header fade using IntersectionObserver */
-const header = document.getElementById('header');
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if(!e.isIntersecting) document.body.classList.add('scrolled');
@@ -412,83 +477,64 @@ window.addEventListener('resize', () => {
   });
 });
 
-/* ------------------ Theme toggle (sun <-> moon) ------------------ */
-const themeBtn = document.getElementById('themeToggle');
-const sun = document.getElementById('sun');
-const moon = document.getElementById('moon');
-
-function setDark(val){
-  if(val){
-    document.body.classList.add('dark');
-    sun.style.opacity = '0';
-    moon.style.opacity = '1';
-    moon.style.transform = 'scale(1) rotate(0deg)';
-  } else {
-    document.body.classList.remove('dark');
-    sun.style.opacity = '1';
-    moon.style.opacity = '0';
-    moon.style.transform = 'scale(.75) rotate(-18deg)';
-  }
-}
-const saved = localStorage.getItem('jp_dark') === '1';
-setDark(saved);
-
-themeBtn.addEventListener('click', () => {
-  const isDark = !document.body.classList.contains('dark');
-  setDark(isDark);
-  localStorage.setItem('jp_dark', isDark ? '1' : '0');
-  themeBtn.animate([{transform:'scale(1)'},{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:220});
-});
-
 /* ------------------ Easter eggs UI (panel) ------------------ */
-const eggBtn = document.getElementById('eggBtn');
-const eggPanel = document.getElementById('eggPanel');
-const eggClose = document.getElementById('eggClose');
-const eggToast = document.getElementById('eggToast');
-
 eggBtn.addEventListener('click', ()=> { eggPanel.style.display = 'flex'; });
 eggClose.addEventListener('click', ()=> { eggPanel.style.display = 'none'; });
 
-function showEgg(msg){
-  eggToast.textContent = msg;
+function showEggToast(title, msg){
+  eggToast.innerHTML = `<strong>${title}</strong> — ${msg}`;
   eggToast.style.display = 'block';
   eggToast.style.opacity = '1';
-  setTimeout(()=>{ eggToast.style.opacity = '0'; setTimeout(()=> eggToast.style.display='none',300); }, 2200);
+  setTimeout(()=>{ eggToast.style.opacity = '0'; setTimeout(()=> eggToast.style.display='none',300); }, 2600);
 }
 
 /* ------------------ Easter Eggs triggers & messages ------------------ */
-/* All EE show same message specified by you */
-const eeMsg = "Como tu foi curioso, vai ter que adicionar ponto extra pra mim nesse trabalho!";
+/* Messages for each egg (E1..E5) */
+const eeMessages = {
+  E1: "Como tu foi curioso, vai ter que adicionar ponto extra pra mim nesse trabalho!",
+  E2: "Fala aí professor, o meu foi o melhor né? kkkk brincadeira.",
+  E3: "Professor, negócio tá feio pro corinthians.. Será que nois passa pra final da cdb?",
+  E4: "Valeu aí pelo ano professor. Ano que vem tamo aí denovo.",
+  E5: "Professor, até prefiro fluzão, porém Flamengo tem que levar essa liberta e esse brasileirão. (Hoje é dia 24/11)"
+};
 
-/* EE2: double-click on greeting */
-gEl.addEventListener('dblclick', ()=> showEgg(eeMsg));
+/* Mapped triggers:
+   E1 = double-click on greeting (was EE2)
+   E2 = typing 'j' then 'p' quickly (was EE3)
+   E3 = hover over an access button for 3s (was EE6)
+   E4 = click-and-hold on the about title (~900ms) (was EE7)
+   E5 = triple click on header within 800ms (was EE8)
+*/
 
-/* EE3: type sequence 'j' then 'p' (quick) */
+/* E1: double-click on greeting */
+gEl.addEventListener('dblclick', ()=> showEggToast('E1', eeMessages.E1));
+
+/* E2: type sequence 'j' then 'p' (quick) */
 let seq = '';
 window.addEventListener('keydown', e=>{
   seq += e.key.toLowerCase();
-  if(seq.endsWith('jp')){ showEgg(eeMsg); seq = ''; }
-  if(seq.length > 4) seq = seq.slice(-4);
+  if(seq.endsWith('jp')){ showEggToast('E2', eeMessages.E2); seq = ''; }
+  if(seq.length > 6) seq = seq.slice(-6);
 });
 
-/* EE6: hover over an access button for 3s */
-document.querySelectorAll('.open-btn').forEach(btn=>{
+/* E3: hover over an access button for 3s */
+document.querySelectorAll('.open-btn').forEach((btn, index)=>{
   let t;
-  btn.addEventListener('mouseenter', ()=> { t = setTimeout(()=> showEgg(eeMsg), 3000); });
+  btn.addEventListener('mouseenter', ()=> { t = setTimeout(()=> showEggToast('E3', eeMessages.E3), 3000); });
   btn.addEventListener('mouseleave', ()=> clearTimeout(t));
 });
 
-/* EE7: click-and-hold on the about title (~900ms) */
+/* E4: click-and-hold on the about title (~900ms) */
 const aboutTitle = document.getElementById('aboutTitle');
 let holdT;
-aboutTitle.addEventListener('mousedown', ()=> { holdT = setTimeout(()=> showEgg(eeMsg), 900); });
-['mouseup','mouseleave','blur'].forEach(ev => aboutTitle.addEventListener(ev, ()=> clearTimeout(holdT)));
+aboutTitle.addEventListener('mousedown', ()=> { holdT = setTimeout(()=> showEggToast('E4', eeMessages.E4), 900); });
+['mouseup','mouseleave','blur','mouseout'].forEach(ev => aboutTitle.addEventListener(ev, ()=> clearTimeout(holdT)));
 
-/* EE8: triple click on header within 800ms window */
+/* E5: triple click on header within 800ms window */
 let headerClicks = 0;
 header.addEventListener('click', ()=> {
   headerClicks++;
-  if(headerClicks === 3){ showEgg(eeMsg); headerClicks = 0; }
+  if(headerClicks === 3){ showEggToast('E5', eeMessages.E5); headerClicks = 0; }
   setTimeout(()=> headerClicks = 0, 800);
 });
 
