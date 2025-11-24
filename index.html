@@ -1,164 +1,403 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>JP – Atalhos</title>
+
+<!-- favicon (imagem que você enviou) -->
+<link rel="icon" href="/mnt/data/0408a110-e38e-4dfb-8858-fbdbab8bdbe9.png" />
 
 <!-- fontes -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Give+You+Glory&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+
 <style>
-    @font-face {
-        font-family: "Balqis";
-        src: url("https://fonts.cdnfonts.com/s/17394/Balqis.woff") format("woff");
-    }
+  :root{
+    --side-h: 580px; /* altura do cartão sobre e da lista */
+    --accent-1: #ff6b6b; /* vermelho */
+    --accent-2: #ffb86b; /* laranja/amarelo claro */
+    --card-bg: rgba(255,245,243,0.9);
+    --text: #2d2d2d;
+    --muted: #6b6b6b;
+  }
 
-    body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: linear-gradient(180deg, #ffe0e7, #ffd6ea, #ffeef4);
-        min-height: 200vh;
-        color: #2d2d2d;
-    }
+  /* dark theme variables (aplicadas quando body tem .dark) */
+  body.dark {
+    --accent-1: #b85a4f;
+    --accent-2: #c78b3a;
+    --card-bg: rgba(30,30,30,0.8);
+    --text: #e9e6e0;
+    --muted: #bdb6ad;
+    background: linear-gradient(180deg, #2b2222, #2f2625);
+  }
 
-    /* saudação */
-    header {
-        padding: 50px 40px;
-        font-family: "Balqis", cursive;
-        font-size: 4rem;
-        background: linear-gradient(
-            to bottom,
-            rgba(255,160,180,0.5),
-            rgba(255,200,210,0.25),
-            transparent
-        );
-        position: sticky;
-        top: 0;
-        backdrop-filter: blur(6px);
-        z-index: 10;
-        transition: opacity 0.4s ease;
-        text-align: left;
-    }
+  /* base */
+  body{
+    margin:0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(180deg, #ff6b6b12, #ffc56b22);
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+    transition: background 0.45s ease, color 0.35s ease;
+  }
 
-    body.scrolled header {
-        opacity: 0.35;
-    }
+  @font-face {
+      font-family: "Balqis";
+      src: url("https://fonts.cdnfonts.com/s/17394/Balqis.woff") format("woff");
+  }
 
-    /* lista de tópicos na esquerda */
-    .list {
-        margin-left: 40px;
-        margin-top: 30px;
-        width: 80%;
-        max-width: 600px;
-    }
+  header{
+    padding:32px 28px;
+    font-family:"Balqis",cursive;
+    font-size:3.6rem;
+    position:sticky;
+    top:0;
+    z-index:50;
+    background: linear-gradient(to bottom, rgba(255, 130, 100, 0.45), rgba(255,200,120,0.18), rgba(255,255,255,0));
+    backdrop-filter: blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
 
-    .item {
-        background: rgba(255, 240, 245, 0.7);
-        padding: 24px 28px;
-        margin-bottom: 18px;
-        border-radius: 16px;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 2rem;
-        transition: background 0.3s;
-    }
+  /* botão claro/escuro (topo direito) */
+  .theme-btn{
+    width:56px;
+    height:56px;
+    border-radius:14px;
+    display:inline-grid;
+    place-items:center;
+    cursor:pointer;
+    border: none;
+    background: var(--card-bg);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: transform .25s ease, background .25s ease;
+    margin-right: 18px;
+  }
+  .theme-btn:hover{ transform: translateY(-3px); }
 
-    .item:hover {
-        background: rgba(255, 225, 235, 0.9);
-    }
+  /* icon wrapper to animate sun->moon */
+  .icon {
+    width:28px;height:28px; display:inline-block; position:relative;
+    transition: transform .45s cubic-bezier(.2,.9,.27,1);
+  }
 
-    .arrow {
-        font-size: 2.1rem;
-        transition: transform 0.35s ease;
-    }
+  /* main layout */
+  .main{
+    display:flex;
+    gap:40px;
+    padding:28px;
+    padding-top:18px;
+    align-items:flex-start;
+  }
 
-    .content {
-        max-height: 0;
-        overflow: hidden;
-        background: rgba(255, 240, 245, 0.8);
-        margin-top: -10px;
-        border-radius: 0 0 16px 16px;
-        padding: 0 28px;
-        transition: max-height 0.45s ease;
-    }
+  /* LIST e alinhamento para bater com about-box */
+  .list{
+    flex:1;
+    max-width:640px;
+    min-height:var(--side-h); /* garante que a lista ocupe a mesma altura do cartão */
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    gap:18px;
+  }
 
-    .content p {
-        margin-top: 24px;
-        font-size: 1.2rem;
-        color: #444;
-    }
+  .item{
+    background:var(--card-bg);
+    padding:22px 26px;
+    border-radius:16px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:1.9rem;
+    transition: background .25s ease, transform .18s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+  }
+  .item:hover{ transform: translateY(-4px); }
 
-    .open-btn {
-        display: inline-block;
-        margin: 15px 0 28px;
-        padding: 14px 26px;
-        background: #ffb3c6;
-        color: #fff;
-        border-radius: 14px;
-        text-decoration: none;
-        font-family: "Give You Glory", cursive;
-        font-size: 1.5rem;
-        transition: 0.3s;
-    }
+  .arrow{ font-size:1.9rem; color:var(--muted); transition: transform .35s ease; }
 
-    .open-btn:hover {
-        background: #ff99b3;
-        transform: scale(1.05);
-    }
+  /* expanded content area (hidden by default) */
+  .content{
+    max-height:0;
+    overflow:hidden;
+    border-radius:0 0 16px 16px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.35));
+    padding:0 26px;
+    transition: max-height .45s ease;
+  }
+  body.dark .content{
+    background: linear-gradient(180deg, rgba(50,50,50,0.7), rgba(35,35,35,0.6));
+  }
 
-    .item.active .arrow {
-        transform: rotate(90deg);
-    }
+  .content p{ margin:20px 0; font-size:1.15rem; color:var(--text); line-height:1.6; }
+
+  .open-btn{
+    display:inline-block;
+    margin-bottom:22px;
+    padding:12px 22px;
+    border-radius:12px;
+    background:linear-gradient(90deg,var(--accent-1), var(--accent-2));
+    color:white;
+    text-decoration:none;
+    font-family:"Give You Glory", cursive;
+    font-size:1.25rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .open-btn:hover{ transform: translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.08); }
+
+  .item.active .arrow{ transform: rotate(90deg); }
+
+  /* about box (lado direito) */
+  .about-box{
+    width:360px;
+    border-radius:20px;
+    padding:28px;
+    background: white;
+    min-height:var(--side-h);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.06);
+  }
+  body.dark .about-box{ background: rgba(25,25,25,0.85); box-shadow: none; }
+  .about-box h2{ font-family:"Caveat", cursive; font-size:2.3rem; margin:0 0 8px 0; color:var(--text); }
+  .about-box p{ color:var(--muted); line-height:1.6; margin:0 0 12px; font-size:1.02rem; }
+
+  .about-footer{ margin-top:12px; font-weight:700; color:var(--text); }
+
+  /* small floating toast for Easter egg */
+  .egg-toast{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:36px;
+    background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
+    color:#fff;
+    padding:12px 18px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    display:none;
+    z-index:99;
+  }
+
+  /* responsiveness */
+  @media (max-width:900px){
+    .main{ flex-direction:column; padding:20px; }
+    .about-box{ width:100%; min-height: auto; }
+    .list{ max-width:100%; min-height: auto; }
+    header{ font-size:2.5rem; padding:20px; }
+  }
 </style>
 </head>
 <body>
 
-<header id="greeting"></header>
+<header id="header">
+  <div id="greeting">Bom dia, JP!</div>
 
-<div style="display:flex; gap:40px; padding:20px;">
+  <!-- theme toggle button (sun -> moon) -->
+  <button class="theme-btn" id="themeToggle" aria-label="Alternar tema">
+    <span class="icon" id="themeIcon" title="Alternar tema">
+      <!-- sun SVG and moon SVG layered; we'll animate opacity/transform -->
+      <svg id="sun" viewBox="0 0 24 24" width="28" height="28" style="position:absolute; left:0; top:0;">
+        <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3.5" fill="currentColor"/>
+          <g stroke="currentColor">
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+          </g>
+        </g>
+      </svg>
+      <svg id="moon" viewBox="0 0 24 24" width="28" height="28" style="position:absolute; left:0; top:0; opacity:0; transform: scale(.6) rotate(-20deg);">
+        <path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z" fill="currentColor"/>
+      </svg>
+    </span>
+  </button>
+</header>
 
-<div class="list" style="flex:1;">
-    <!-- conteúdo original mantido -->
-    <!-- (vou inserir exatamente como estava, só movido para cá) -->
+<!-- toast for easter egg -->
+<div class="egg-toast" id="eggToast">Você achou um easter egg ✨</div>
+
+<main class="main">
+  <section class="list" id="list">
     <div class="item" onclick="toggle(0)">TikTok <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>Assistir um tiktokzinho né JP? Para relaxar um pouquinho..</p><a class="open-btn" href="https://www.tiktok.com" target="_blank">Acessar TikTok</a></div>
+    <div class="content"><p id="tiktokText"></p><a class="open-btn" href="https://www.tiktok.com" target="_blank">Acessar TikTok</a></div>
+
     <div class="item" onclick="toggle(1)">Instagram <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>Eai JP, alguém mandou mensagem?.. Ou vai só ver o feed mesmo?..</p><a class="open-btn" href="https://www.instagram.com" target="_blank">Acessar Instagram</a></div>
+    <div class="content"><p id="igText"></p><a class="open-btn" href="https://www.instagram.com" target="_blank">Acessar Instagram</a></div>
+
     <div class="item" onclick="toggle(2)">YouTube <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>Assistir um videozinho né naqueles pique.. Ou só vai de shorts mesmo? haha</p><a class="open-btn" href="https://www.youtube.com" target="_blank">Acessar YouTube</a></div>
+    <div class="content"><p id="ytText"></p><a class="open-btn" href="https://www.youtube.com" target="_blank">Acessar YouTube</a></div>
+
     <div class="item" onclick="toggle(3)">ChatGPT <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>Chatzinho é daora mermão, vai tratar de algum assunto sério? Ou só algo que tu não conseguiu resolver ainda? Kkkkk</p><a class="open-btn" href="https://chat.openai.com" target="_blank">Acessar ChatGPT</a></div>
+    <div class="content"><p id="gptText"></p><a class="open-btn" href="https://chat.openai.com" target="_blank">Acessar ChatGPT</a></div>
+
     <div class="item" onclick="toggle(4)">Gmail <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>O que foi dessa vez? Código? Vai responder e-mail?..</p><a class="open-btn" href="https://mail.google.com" target="_blank">Acessar Gmail</a></div>
-</div>
+    <div class="content"><p id="gmailText"></p><a class="open-btn" href="https://mail.google.com" target="_blank">Acessar Gmail</a></div>
+  </section>
 
-<div style="width:350px; background:white; border-radius:20px; padding:25px; height:fit-content;">
-    <h2 style="font-family:'Horizon', sans-serif; font-size:1.8rem; margin-top:0;">Sobre o site</h2>
-    <ul style="list-style:none; padding:0; line-height:1.8;">
-        <li>• Atalhos rápidos para apps</li>
-        <li>• Mensagens personalizadas</li>
-        <li>• Saudações dinâmicas (manhã/tarde/noite)</li>
-        <li>• Expansão animada dos tópicos</li>
-        <li>• Layout minimalista e leve</li>
-        <li>• Design focado no JP 🔥</li>
-    </ul>
-</div>
+  <aside class="about-box" id="about">
+    <h2>Sobre o site</h2>
 
-</div>
+    <p>Criei esse site só pra deixar minha vida mais rápida msm, sem ter que perder tempo toda hora.  
+    Aqui eu clico e já vou direto onde preciso.</p>
+
+    <p>Coloquei umas mensagens só pra deixar mais daorinha sabe? Já que seria para uso pessoal kkkk.  
+    Fiz no intuito de como se fosse eu conversando comigo mesmo, espero que tenha dado para entender.  
+    Inclusive, toda vez que atualizar a página, há 1/2 de chance das frases mudarem.</p>
+
+    <p>A mensagem principal de bom dia/boa tarde/boa noite muda conforme a hora, porque eu achei que ficaria mais legal também.  
+    &lt;12 = bom dia  •  &lt;18 = boa tarde  •  &lt;6 = boa noite</p>
+
+    <p>Visualzinho limpo, animadinho, clean, minimalista… eu curto assim e espero que tu concorde comigo professor kkkkk.</p>
+
+    <div class="about-footer"><b>feito por JP</b></div>
+  </aside>
+</main>
 
 <script>
-// saudação
-const h = new Date().getHours();
-const g = document.getElementById("greeting");
-g.innerHTML = h < 12 ? "Bom dia, JP!" : h < 18 ? "Boa tarde, JP!" : "Boa noite, JP!";
-window.onscroll = () => { if (window.scrollY > 10) document.body.classList.add("scrolled"); else document.body.classList.remove("scrolled"); };
-function toggle(i){const items=document.querySelectorAll(".item");const contents=document.querySelectorAll(".content");const item=items[i];const content=contents[i];const isOpen=item.classList.contains("active");items.forEach((el,x)=>{el.classList.remove("active");contents[x].style.maxHeight="0px"});if(!isOpen){item.classList.add("active");content.style.maxHeight=content.scrollHeight+"px";}}
+/* ---------- Saudação (corrigida) ---------- */
+const gEl = document.getElementById('greeting');
+function atualizarSaudacao(){
+  const h = new Date().getHours();
+  gEl.textContent = h < 12 ? "Bom dia, JP!" : h < 18 ? "Boa tarde, JP!" : "Boa noite, JP!";
+}
+atualizarSaudacao();
+
+/* ---------- header fade in/out usando IntersectionObserver ---------- */
+const header = document.getElementById('header');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(ent => {
+    if (!ent.isIntersecting) document.body.classList.add('scrolled');
+    else document.body.classList.remove('scrolled');
+  });
+}, {root: null, threshold: 0});
+observer.observe(header);
+
+/* ---------- Alternância de frases (50/50) ---------- */
+function pick(a,b){ return Math.random() < 0.5 ? a : b; }
+
+document.getElementById("tiktokText").innerText = pick(
+  "Assistir um tiktokzinho né JP? Vai ver uns memes, dar umas boas risadas e perder a noção do tempo kkkkk.",
+  "Assistir um tiktokzinho né JP? Para relaxar um pouquinho.."
+);
+
+document.getElementById("igText").innerText = pick(
+  "Eai jp, será que teve partidaças na tntsports pra verificar? Algum stories novo de alguém? Vai checar o feed ou ver se chegou DM nova? 👀",
+  "Eai JP, alguém mandou mensagem?.. Ou vai só ver o feed mesmo?.."
+);
+
+document.getElementById("ytText").innerText = pick(
+  "Vai ver uns vídeos top? Ou vai ficar só no shorts infinito que causa aquela procrastinação? 🤣",
+  "Assistir um videozinho né naqueles pique.. Ou só vai de shorts mesmo? haha"
+);
+
+document.getElementById("gptText").innerText = pick(
+  "Vai só trocar uma com o chat? Resolver algum assunto sério? Ou só algum problema que tu teve e não tá sabendo resolver? 😂",
+  "Chatzinho é daora mermão, vai tratar de algum assunto sério? Ou só algo que tu não conseguiu resolver ainda? Kkkkk"
+);
+
+document.getElementById("gmailText").innerText = pick(
+  "Código chegando? Lição nova? Ou só um e-mail aleatório nada a ver? kkkkk",
+  "O que foi dessa vez? Código? Vai responder e-mail?.."
+);
+
+/* ---------- Toggle expand/close ---------- */
+function toggle(i){
+  const items = document.querySelectorAll('.item');
+  const contents = document.querySelectorAll('.content');
+  const isOpen = items[i].classList.contains('active');
+  items.forEach((el, idx) => {
+    el.classList.remove('active');
+    contents[idx].style.maxHeight = '0px';
+  });
+  if(!isOpen){
+    items[i].classList.add('active');
+    contents[i].style.maxHeight = contents[i].scrollHeight + 'px';
+  }
+}
+
+/* ---------- Theme toggle (sun ↔ moon) ---------- */
+const themeBtn = document.getElementById('themeToggle');
+const sunIcon = document.getElementById('sun');
+const moonIcon = document.getElementById('moon');
+
+function setDark(val){
+  if(val){
+    document.body.classList.add('dark');
+    sunIcon.style.opacity = '0';
+    sunIcon.style.transform = 'scale(.6) rotate(-20deg)';
+    moonIcon.style.opacity = '1';
+    moonIcon.style.transform = 'scale(1) rotate(0deg)';
+  } else {
+    document.body.classList.remove('dark');
+    sunIcon.style.opacity = '1';
+    sunIcon.style.transform = 'scale(1) rotate(0deg)';
+    moonIcon.style.opacity = '0';
+    moonIcon.style.transform = 'scale(.6) rotate(-20deg)';
+  }
+}
+
+// preserve preference in localStorage
+const saved = localStorage.getItem('jp_dark') === '1';
+setDark(saved);
+
+themeBtn.addEventListener('click', () => {
+  const isDark = document.body.classList.toggle('dark');
+  setDark(isDark);
+  localStorage.setItem('jp_dark', isDark ? '1' : '0');
+  // small click scale animation
+  themeBtn.animate([{ transform: 'scale(1)' }, { transform: 'scale(.92)' }, { transform: 'scale(1)' }], { duration: 240 });
+});
+
+/* ---------- Fix for empty space at bottom (ensure body min height ok) ---------- */
+/* Already set min-height:100vh and main spacing controlled; the list and about-box use the same var height. */
+
+/* ---------- Easter eggs (escondidos): 
+   - pressionar as teclas 'j' então 'p' (sequência rápida) mostra um toast
+   - dar duplo clique no título 'Sobre o site' revela um pequeno alerta secreto
+   (vou te listar todos depois quando tu pedir)
+*/
+let keySeq = '';
+window.addEventListener('keydown', e => {
+  keySeq += e.key.toLowerCase();
+  if(keySeq.endsWith('jp')){
+    showEggToast("Easter egg desbloqueado 🎉");
+    keySeq = '';
+  }
+  // keep sequence short
+  if(keySeq.length > 4) keySeq = keySeq.slice(-4);
+});
+
+const aboutTitle = document.querySelector('.about-box h2');
+aboutTitle.addEventListener('dblclick', () => {
+  showEggToast("Segredo revelado 👀");
+});
+
+// toast helper
+function showEggToast(text){
+  const t = document.getElementById('eggToast');
+  t.textContent = text;
+  t.style.display = 'block';
+  t.style.opacity = '1';
+  setTimeout(()=>{ t.style.opacity='0'; setTimeout(()=> t.style.display='none',300); }, 2200);
+}
+
+/* ---------- ensure when resizing the page, expanded content sizes recalc ---------- */
+window.addEventListener('resize', () => {
+  const contents = document.querySelectorAll('.content');
+  contents.forEach(c => {
+    if(c.previousElementSibling.classList.contains('active')){
+      c.style.maxHeight = c.scrollHeight + 'px';
+    }
+  });
+});
+
+/* ---------- initial close all contents ---------- */
+document.querySelectorAll('.content').forEach(c => c.style.maxHeight = '0px');
 </script>
 
 </body>
 </html>
-
-// TODO: implement dark mode toggle, unified topic sizing, masculine gradient, easter eggs, icon integration.
