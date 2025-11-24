@@ -118,72 +118,44 @@
 
 <header id="greeting"></header>
 
-<div class="list">
+<div style="display:flex; gap:40px; padding:20px;">
 
+<div class="list" style="flex:1;">
+    <!-- conteúdo original mantido -->
+    <!-- (vou inserir exatamente como estava, só movido para cá) -->
     <div class="item" onclick="toggle(0)">TikTok <span class="arrow">ᐅ</span></div>
-    <div class="content">
-        <p>Assistir um tiktokzinho né JP? Para relaxar um pouquinho..</p>
-        <a class="open-btn" href="https://www.tiktok.com" target="_blank">Acessar TikTok</a>
-    </div>
-
+    <div class="content"><p>Assistir um tiktokzinho né JP? Para relaxar um pouquinho..</p><a class="open-btn" href="https://www.tiktok.com" target="_blank">Acessar TikTok</a></div>
     <div class="item" onclick="toggle(1)">Instagram <span class="arrow">ᐅ</span></div>
-    <div class="content">
-        <p>Eai JP, alguém mandou mensagem?.. Ou vai só ver o feed mesmo?..</p>
-        <a class="open-btn" href="https://www.instagram.com" target="_blank">Acessar Instagram</a>
-    </div>
-
+    <div class="content"><p>Eai JP, alguém mandou mensagem?.. Ou vai só ver o feed mesmo?..</p><a class="open-btn" href="https://www.instagram.com" target="_blank">Acessar Instagram</a></div>
     <div class="item" onclick="toggle(2)">YouTube <span class="arrow">ᐅ</span></div>
-    <div class="content">
-        <p>Assistir um videozinho né naqueles pique.. Ou só vai de shorts mesmo? haha</p>
-        <a class="open-btn" href="https://www.youtube.com" target="_blank">Acessar YouTube</a>
-    </div>
-
+    <div class="content"><p>Assistir um videozinho né naqueles pique.. Ou só vai de shorts mesmo? haha</p><a class="open-btn" href="https://www.youtube.com" target="_blank">Acessar YouTube</a></div>
     <div class="item" onclick="toggle(3)">ChatGPT <span class="arrow">ᐅ</span></div>
-    <div class="content">
-        <p>Chatzinho é daora mermão, vai tratar de algum assunto sério? Ou só algo que tu não conseguiu resolver ainda? Kkkkk</p>
-        <a class="open-btn" href="https://chat.openai.com" target="_blank">Acessar ChatGPT</a>
-    </div>
-
+    <div class="content"><p>Chatzinho é daora mermão, vai tratar de algum assunto sério? Ou só algo que tu não conseguiu resolver ainda? Kkkkk</p><a class="open-btn" href="https://chat.openai.com" target="_blank">Acessar ChatGPT</a></div>
     <div class="item" onclick="toggle(4)">Gmail <span class="arrow">ᐅ</span></div>
-    <div class="content">
-        <p>O que foi dessa vez? Código? Vai responder e-mail?..</p>
-        <a class="open-btn" href="https://mail.google.com" target="_blank">Acessar Gmail</a>
-    </div>
+    <div class="content"><p>O que foi dessa vez? Código? Vai responder e-mail?..</p><a class="open-btn" href="https://mail.google.com" target="_blank">Acessar Gmail</a></div>
+</div>
+
+<div style="width:350px; background:white; border-radius:20px; padding:25px; height:fit-content;">
+    <h2 style="font-family:'Horizon', sans-serif; font-size:1.8rem; margin-top:0;">Sobre o site</h2>
+    <ul style="list-style:none; padding:0; line-height:1.8;">
+        <li>• Atalhos rápidos para apps</li>
+        <li>• Mensagens personalizadas</li>
+        <li>• Saudações dinâmicas (manhã/tarde/noite)</li>
+        <li>• Expansão animada dos tópicos</li>
+        <li>• Layout minimalista e leve</li>
+        <li>• Design focado no JP 🔥</li>
+    </ul>
+</div>
 
 </div>
 
 <script>
-    const hour = new Date().getHours();
-    const g = document.getElementById("greeting");
-    g.innerHTML =
-        hour < 12 ? "Bom dia, JP!" :
-        hour < 18 ? "Boa tarde, JP!" :
-                     "Boa noite, JP!";
-
-    window.onscroll = () => {
-        if (window.scrollY > 10) document.body.classList.add("scrolled");
-        else document.body.classList.remove("scrolled");
-    };
-
-    function toggle(i) {
-        const items = document.querySelectorAll(".item");
-        const contents = document.querySelectorAll(".content");
-
-        const item = items[i];
-        const content = contents[i];
-
-        const isOpen = item.classList.contains("active");
-
-        items.forEach((el, x) => {
-            el.classList.remove("active");
-            contents[x].style.maxHeight = "0px";
-        });
-
-        if (!isOpen) {
-            item.classList.add("active");
-            content.style.maxHeight = content.scrollHeight + "px";
-        }
-    }
+// saudação
+const h = new Date().getHours();
+const g = document.getElementById("greeting");
+g.innerHTML = h < 12 ? "Bom dia, JP!" : h < 18 ? "Boa tarde, JP!" : "Boa noite, JP!";
+window.onscroll = () => { if (window.scrollY > 10) document.body.classList.add("scrolled"); else document.body.classList.remove("scrolled"); };
+function toggle(i){const items=document.querySelectorAll(".item");const contents=document.querySelectorAll(".content");const item=items[i];const content=contents[i];const isOpen=item.classList.contains("active");items.forEach((el,x)=>{el.classList.remove("active");contents[x].style.maxHeight="0px"});if(!isOpen){item.classList.add("active");content.style.maxHeight=content.scrollHeight+"px";}}
 </script>
 
 </body>
