@@ -8,7 +8,7 @@
 <!-- fontes -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Give+You+Glory&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
 
 <style>
     @font-face {
@@ -19,57 +19,63 @@
     body {
         margin: 0;
         font-family: "Poppins", sans-serif;
-        background: linear-gradient(180deg, #ffe0e7, #ffd6ea, #ffe7d1, #ffc8b8, #ffd2d2);
-        min-height: 200vh;
+        background: linear-gradient(180deg, #ffe0d2, #ffd0c8, #ffc1ba);
+        min-height: 150vh;
         color: #2d2d2d;
+        overflow-x: hidden;
     }
 
     /* saudação */
     header {
-        padding: 50px 40px;
+        padding: 40px 40px 20px;
         font-family: "Balqis", cursive;
         font-size: 4rem;
-        background: linear-gradient(
-            to bottom,
-            rgba(255,150,150,0.5),
-            rgba(255,180,120,0.25),
-            transparent
-        );
         position: sticky;
         top: 0;
-        backdrop-filter: blur(6px);
         z-index: 10;
-        transition: opacity 0.4s ease;
+        background: linear-gradient(
+            to bottom,
+            rgba(255,180,170,0.55),
+            rgba(255,200,185,0.30),
+            rgba(255,220,205,0)
+        );
+        backdrop-filter: blur(6px);
+        transition: opacity 0.35s ease;
         text-align: left;
     }
 
     body.scrolled header {
-        opacity: 0.35;
+        opacity: 0;
     }
 
-    /* lista */
+    /* layout geral */
+    .main {
+        display: flex;
+        gap: 40px;
+        padding: 40px;
+        padding-top: 10px;
+    }
+
     .list {
-        margin-left: 40px;
-        margin-top: 30px;
-        width: 80%;
+        flex: 1;
         max-width: 600px;
     }
 
     .item {
-        background: rgba(255, 240, 245, 0.7);
-        padding: 28px 28px;
-        margin-bottom: 20px;
+        background: rgba(255, 235, 230, 0.75);
+        padding: 25px 28px;
+        margin-bottom: 22px;
         border-radius: 18px;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 2.1rem;
+        font-size: 2.2rem;
         transition: background 0.3s;
     }
 
     .item:hover {
-        background: rgba(255, 225, 235, 0.9);
+        background: rgba(255, 220, 210, 0.9);
     }
 
     .arrow {
@@ -80,34 +86,34 @@
     .content {
         max-height: 0;
         overflow: hidden;
-        background: rgba(255, 240, 245, 0.85);
-        margin-top: -10px;
+        background: rgba(255, 235, 230, 0.82);
+        margin-top: -12px;
         border-radius: 0 0 18px 18px;
         padding: 0 28px;
         transition: max-height 0.45s ease;
     }
 
     .content p {
-        margin-top: 24px;
+        margin-top: 22px;
         font-size: 1.25rem;
         color: #444;
     }
 
     .open-btn {
         display: inline-block;
-        margin: 15px 0 30px;
-        padding: 14px 26px;
-        background: #ffa8a8;
+        margin: 15px 0 28px;
+        padding: 14px 28px;
+        background: #ff9f85;
         color: #fff;
         border-radius: 14px;
         text-decoration: none;
         font-family: "Give You Glory", cursive;
-        font-size: 1.6rem;
+        font-size: 1.7rem;
         transition: 0.3s;
     }
 
     .open-btn:hover {
-        background: #ff8e8e;
+        background: #ff886b;
         transform: scale(1.05);
     }
 
@@ -115,91 +121,137 @@
         transform: rotate(90deg);
     }
 
-    /* caixa lateral */
-    .side-box {
+    /* sobre */
+    .about-box {
         width: 350px;
-        background: rgba(255,255,255,0.9);
-        border-radius: 22px;
-        padding: 30px;
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
         height: fit-content;
-        box-shadow: 0 0 15px rgba(255, 150, 150, 0.25);
     }
 
-    .side-title {
+    .about-box h2 {
         font-family: "Caveat", cursive;
-        font-size: 2.3rem;
-        margin-top: 0;
+        font-size: 2.5rem;
+        margin: 0;
         margin-bottom: 10px;
     }
 
-    .side-box p {
-        font-size: 1.15rem;
+    .about-box p {
         line-height: 1.7;
-        margin-bottom: 18px;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    .about-box b {
+        font-size: 1.2rem;
     }
 </style>
 </head>
+
 <body>
 
 <header id="greeting"></header>
 
-<div style="display:flex; gap:40px; padding:20px;">
+<div class="main">
 
-<div class="list" style="flex:1;">
-
+<div class="list">
     <div class="item" onclick="toggle(0)">TikTok <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>Assistir um tiktokzinho né JP? Vai ver uns memes, dar umas boas risadas e perder a noção do tempo kkkkk.</p><a class="open-btn" href="https://www.tiktok.com" target="_blank">Acessar TikTok</a></div>
+    <div class="content"><p id="tiktokText"></p><a class="open-btn" href="https://www.tiktok.com" target="_blank">Acessar TikTok</a></div>
 
     <div class="item" onclick="toggle(1)">Instagram <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>E aí JP, será que alguém te notou hoje? Vai checar o feed ou ver se chegou DM nova? 👀</p><a class="open-btn" href="https://www.instagram.com" target="_blank">Acessar Instagram</a></div>
+    <div class="content"><p id="igText"></p><a class="open-btn" href="https://www.instagram.com" target="_blank">Acessar Instagram</a></div>
 
     <div class="item" onclick="toggle(2)">YouTube <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>Bora ver uns vídeos brabos? Ou vai ficar só no shorts infinito que prende a alma? 🤣</p><a class="open-btn" href="https://www.youtube.com" target="_blank">Acessar YouTube</a></div>
+    <div class="content"><p id="ytText"></p><a class="open-btn" href="https://www.youtube.com" target="_blank">Acessar YouTube</a></div>
 
     <div class="item" onclick="toggle(3)">ChatGPT <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>Bora trocar uma ideia? Ou resolver aquele bagulho que tu adiou desde ontem? 😂</p><a class="open-btn" href="https://chat.openai.com" target="_blank">Acessar ChatGPT</a></div>
+    <div class="content"><p id="gptText"></p><a class="open-btn" href="https://chat.openai.com" target="_blank">Acessar ChatGPT</a></div>
 
     <div class="item" onclick="toggle(4)">Gmail <span class="arrow">ᐅ</span></div>
-    <div class="content"><p>Código chegando? Lembrança de prova? Ou só um e-mail aleatório nada a ver kkkkk.</p><a class="open-btn" href="https://mail.google.com" target="_blank">Acessar Gmail</a></div>
-
+    <div class="content"><p id="gmailText"></p><a class="open-btn" href="https://mail.google.com" target="_blank">Acessar Gmail</a></div>
 </div>
 
-<div class="side-box">
-    <h2 class="side-title">Sobre o site</h2>
+<div class="about-box">
+    <h2>Sobre o site</h2>
+    <p>
+        Criei esse site só pra deixar minha vida mais rápida msm, sem ter que perder tempo toda hora.  
+        Aqui eu clico e já vou direto onde preciso.  
+        Coloquei umas mensagens só pra deixar mais daorinha sabe? Já que seria para uso pessoal kkkk.  
+        Fiz no intuito de como se fosse eu conversando comigo mesmo, espero que tenha dado para entender.  
+        Inclusive, toda vez que atualizar a página, há 1/2 de chance das frases mudarem.
+    </p>
 
-    <p>Criei esse site só pra deixar minha vida mais rápida mesmo, sem ter que ficar caçando link toda hora. Aqui eu clico e já vou direto onde preciso.</p>
+    <p>
+        A mensagem principal de bom dia/boa tarde/boa noite muda conforme a hora, porque eu achei que ficaria mais legal também.  
+        <br><12 = bom dia  
+        <18 = boa tarde  
+        <6 = boa noite  
+    </p>
 
-    <p>Coloquei umas mensagens só pra deixar o bagulho mais leve, já que entrar em rede social às vezes dá vontade de sumir kkkkk.</p>
+    <p>Visualzinho limpo, animadinho, clean, minimalista… eu curto assim e espero que tu concorde comigo professor kkkkk.</p>
 
-    <p>A saudação muda conforme a hora, porque eu sou chique e gosto de frescura.</p>
-
-    <p>Visualzinho limpo, animadinho, com degrade quente porque combina comigo 🔥</p>
-
-    <p><b>FEITO POR JP</b></p>
+    <b>feito por JP</b>
 </div>
 
 </div>
 
 <script>
-// saudação
+/* SAUDAÇÃO */
 const h = new Date().getHours();
-const g = document.getElementById("greeting");
-g.innerHTML = h < 12 ? "Bom dia, JP!" : h < 18 ? "Boa tarde, JP!" : "Boa noite, JP!";
-window.onscroll = () => { if (window.scrollY > 10) document.body.classList.add("scrolled"); else document.body.classList.remove("scrolled"); };
+const greet = document.getElementById("greeting");
+greet.innerHTML = h < 12 ? "Bom dia, JP!" : h < 18 ? "Boa tarde, JP!" : "Boa noite, JP!";
 
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 70) document.body.classList.add("scrolled");
+    else document.body.classList.remove("scrolled");
+});
+
+/* FRASES ALTERNADAS (50% chance) */
+function pick(a, b) {
+    return Math.random() < 0.5 ? a : b;
+}
+
+document.getElementById("tiktokText").innerText = pick(
+    "Assistir um tiktokzinho né JP? Vai ver uns memes, dar umas boas risadas e perder a noção do tempo kkkkk.",
+    "Assistir um tiktokzinho né JP? Para relaxar um pouquinho.."
+);
+
+document.getElementById("igText").innerText = pick(
+    "Eai jp, será que teve partidaças na tntsports pra verificar? Algum stories novo de alguém? Vai checar o feed ou ver se chegou DM nova? 👀",
+    "Eai JP, alguém mandou mensagem?.. Ou vai só ver o feed mesmo?.."
+);
+
+document.getElementById("ytText").innerText = pick(
+    "Vai ver uns vídeos top? Ou vai ficar só no shorts infinito que causa aquela procrastinação? 🤣",
+    "Assistir um videozinho né naqueles pique.. Ou só vai de shorts mesmo? haha"
+);
+
+document.getElementById("gptText").innerText = pick(
+    "Vai só trocar uma com o chat? Resolver algum assunto sério? Ou só algum problema que tu teve e não tá sabendo resolver? 😂",
+    "Chatzinho é daora mermão, vai tratar de algum assunto sério? Ou só algo que tu não conseguiu resolver ainda? Kkkkk"
+);
+
+document.getElementById("gmailText").innerText = pick(
+    "Código chegando? Lição nova? Ou só um e-mail aleatório nada a ver? kkkkk",
+    "O que foi dessa vez? Código? Vai responder e-mail?.."
+);
+
+/* TOGGLE */
 function toggle(i){
-    const items=document.querySelectorAll(".item");
-    const contents=document.querySelectorAll(".content");
-    const item=items[i];
-    const content=contents[i];
-    const isOpen=item.classList.contains("active");
-    items.forEach((el,x)=>{
+    const items = document.querySelectorAll(".item");
+    const contents = document.querySelectorAll(".content");
+
+    const isOpen = items[i].classList.contains("active");
+
+    items.forEach((el, x) => {
         el.classList.remove("active");
-        contents[x].style.maxHeight="0px"
+        contents[x].style.maxHeight = "0px";
     });
-    if(!isOpen){
-        item.classList.add("active");
-        content.style.maxHeight=content.scrollHeight+"px";
+
+    if (!isOpen) {
+        items[i].classList.add("active");
+        contents[i].style.maxHeight = contents[i].scrollHeight + "px";
     }
 }
 </script>
