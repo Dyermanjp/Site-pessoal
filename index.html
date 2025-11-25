@@ -14,6 +14,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
 
 <style>
+  .item.active .arrow {
+    transform: rotate(90deg);
+}
+
+.arrow {
+    transition: transform .3s ease;
+}
+
   :root{
     --side-h: 580px;
     --accent-1: #d94b3a; /* vermelho mais seco */
@@ -557,31 +565,29 @@ aboutTitle.addEventListener('mousedown', ()=> { holdT = setTimeout(()=> showEggT
 
 /* E5: triple click on header within 800ms window */
 let headerClicks = 0;
-header.addEventListener('click', ()=> {
+let resetTimer;
+
+header.addEventListener('click', () => {
   headerClicks++;
-  if(headerClicks === 10){
+  if (headerClicks === 10) {
     showEggToast('E5', eeMessages.E5);
     headerClicks = 0;
   }
-  setTimeout(()=> headerClicks = 0, 3000);
+  clearTimeout(resetTimer);
+  resetTimer = setTimeout(() => headerClicks = 0, 3000);
 });
+
 
 /* ------------------ Play short egg sound (WebAudio API) ------------------ */
 let audioCtx;
-function playEggSound(){
+function playEggSound() {
   try {
-    const iframe = document.createElement("iframe");
-    iframe.width = "0";
-    iframe.height = "0";
-    iframe.style.border = "0";
-    iframe.src = "https://www.myinstants.com/instant/ronaldo-siu-48927/embed/";
-    document.body.appendChild(iframe);
-
-    setTimeout(() => iframe.remove(), 2500);
-  } catch(e){
-    // ignore if not allowed
-  }
+    const audio = new Audio("https://www.myinstants.com/media/sounds/siu.mp3");
+    audio.volume = 1;
+    audio.play().catch(()=>{});
+  } catch (e) {}
 }
+  
 
 
 /* ------------------ small accessibility & initial state ------------------ */
