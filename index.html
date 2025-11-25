@@ -195,10 +195,19 @@
   <div id="preCard" role="dialog" aria-modal="true">
     <!-- theme toggle added to overlay -->
     <button id="preThemeBtn" aria-label="Alternar tema (overlay)">
-      <!-- cleaned SVGs (no absolute positioning) -->
-      <svg id="preSun" viewBox="0 0 24 24" width="20" height="20" style="opacity:1;"><circle cx="12" cy="12" r="3.5" fill="currentColor"/></svg>
-      <svg id="preMoon" viewBox="0 0 24 24" width="20" height="20" style="opacity:0;transform:scale(.75) rotate(-18deg);"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z" fill="currentColor"/></svg>
-    </button>
+  <svg id="preSun" viewBox="0 0 24 24" width="20" height="20" style="opacity:1;">
+    <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3.5" fill="currentColor"/>
+      <g stroke="currentColor">
+        <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+      </g>
+    </g>
+  </svg>
+
+  <svg id="preMoon" viewBox="0 0 24 24" width="20" height="20" style="opacity:0;transform:scale(.75) rotate(-18deg);">
+    <path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z" fill="currentColor"/>
+  </svg>
+</button>
 
     <p style="font-size:1.05rem;"><strong>Aviso!</strong><br><br>
     O modo claro do site é <strong>um pouco</strong> claro mesmo.. Aqui na direitinha você tem a opção de deixar no modo escuro ou claro antes de entrar.</p>
@@ -240,7 +249,7 @@
     <p><strong>E2</strong> — Digite rapidamente as letras <code>j</code> depois <code>p</code>.</p>
     <p><strong>E3</strong> — Mantenha o mouse sobre um botão “Acessar” por 3s.</p>
     <p><strong>E4</strong> — Clique e segure onde tem "Sobre o site" por ~1s.</p>
-    <p><strong>E5</strong> — Clique 3 vezes no topo do site (em cima do bom dia/tarde/noite).</p>
+    <p><strong>E5</strong> — Clique 10 vezes no topo do site (em cima do bom dia/tarde/noite).</p>
   </div>
 </div>
 
@@ -550,33 +559,30 @@ aboutTitle.addEventListener('mousedown', ()=> { holdT = setTimeout(()=> showEggT
 let headerClicks = 0;
 header.addEventListener('click', ()=> {
   headerClicks++;
-  if(headerClicks === 3){ showEggToast('E5', eeMessages.E5); headerClicks = 0; }
-  setTimeout(()=> headerClicks = 0, 800);
+  if(headerClicks === 10){
+    showEggToast('E5', eeMessages.E5);
+    headerClicks = 0;
+  }
+  setTimeout(()=> headerClicks = 0, 3000);
 });
 
 /* ------------------ Play short egg sound (WebAudio API) ------------------ */
 let audioCtx;
 function playEggSound(){
-  try{
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = audioCtx;
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = 'sine';
-    o.frequency.value = 880; // A5-ish short beep
-    g.gain.value = 0;
-    o.connect(g);
-    g.connect(ctx.destination);
-    const now = ctx.currentTime;
-    g.gain.setValueAtTime(0, now);
-    g.gain.linearRampToValueAtTime(0.12, now + 0.01);
-    o.start(now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-    o.stop(now + 0.25);
-  }catch(e){
+  try {
+    const iframe = document.createElement("iframe");
+    iframe.width = "0";
+    iframe.height = "0";
+    iframe.style.border = "0";
+    iframe.src = "https://www.myinstants.com/instant/ronaldo-siu-48927/embed/";
+    document.body.appendChild(iframe);
+
+    setTimeout(() => iframe.remove(), 2500);
+  } catch(e){
     // ignore if not allowed
   }
 }
+
 
 /* ------------------ small accessibility & initial state ------------------ */
 /* close any open contents */
